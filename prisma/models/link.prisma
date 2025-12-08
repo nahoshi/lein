@@ -1,0 +1,37 @@
+enum LinkType {
+    Button
+    Expanded
+}
+
+model LinkDataExpanded {
+    linkId Int  @id
+    link   Link @relation("LinkDataExpanded", fields: [linkId], references: [id])
+
+    sublinks Link[] @relation("SublinkParent")
+}
+
+model LinkDataButton {
+    linkId Int    @id
+    url    String
+
+    link Link @relation("LinkDataButton", fields: [linkId], references: [id])
+}
+
+model Link {
+    id          Int      @id @default(autoincrement())
+    type        LinkType
+    title       String
+    isImportant Boolean
+
+    iconId Int  @unique
+    icon   Icon @relation(fields: [iconId], references: [id])
+
+    sessionId Int?
+    session   Session? @relation(fields: [sessionId], references: [id])
+
+    dataButton   LinkDataButton?   @relation("LinkDataButton")
+    dataExpanded LinkDataExpanded? @relation("LinkDataExpanded")
+
+    parentDataExpandedId Int?
+    parentDataExpanded   LinkDataExpanded? @relation("SublinkParent", fields: [parentDataExpandedId], references: [linkId])
+}
