@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/prisma/client";
 
 declare global {
   namespace App {
-    var prisma: PrismaClient | undefined;
   }
 }
 
