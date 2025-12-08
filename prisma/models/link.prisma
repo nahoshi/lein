@@ -23,8 +23,8 @@ model Link {
     title       String
     isImportant Boolean
 
-    iconId Int  @unique
-    icon   Icon @relation(fields: [iconId], references: [id])
+    iconId Int?  @unique
+    icon   Icon? @relation(fields: [iconId], references: [id])
 
     sessionId Int?
     session   Session? @relation(fields: [sessionId], references: [id])
