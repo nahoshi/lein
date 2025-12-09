@@ -18,21 +18,11 @@
         title: string;
         links: Array<LinkWithIcon>;
     } = $props();
-
-    const _links = $derived(
-        Array.from({ length: Math.ceil(links.length / 2) }, (_, index) =>
-            links.slice(index * 2, index * 2 + 2),
-        ),
-    );
 </script>
 
-<h2 class="text-2xl font-bold text-center mb-2">{title}</h2>
-{#each _links as twoLinks, idx (idx)}
-    <div class="flex gap-2 mx-auto w-full">
-        {#each twoLinks as link}
-            <LinkButton icon={link.icon} link={link.url}
-                >{link.title}</LinkButton
-            >
-        {/each}
-    </div>
-{/each}
+<h2 class="text-3xl font-bold text-center mb-2 alegreya-sans">{title}</h2>
+<div class="flex flex-col gap-2 w-full">
+    {#each links as link, idx (idx)}
+        <LinkButton icon={link.icon} link={link.url}>{link.title}</LinkButton>
+    {/each}
+</div>
