@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Icon } from "$lib/icon.svelte";
     import type {
         Prisma,
         Icon as IcomModel,
@@ -20,9 +19,10 @@
         links: Array<LinkWithIcon>;
     } = $props();
 
-    const _links = Array.from(
-        { length: Math.ceil(links.length / 2) },
-        (_, index) => links.slice(index * 2, index * 2 + 2),
+    const _links = $derived(
+        Array.from({ length: Math.ceil(links.length / 2) }, (_, index) =>
+            links.slice(index * 2, index * 2 + 2),
+        ),
     );
 </script>
 
