@@ -28,6 +28,9 @@
   "type": "module",
   "dependencies": {
     "@prisma/adapter-pg": "^7.1.0",
-    "@prisma/client": "^7.1.0"
+    "@prisma/client": "^7.1.0",
+    "lucia": "^3.2.2",
+    "@lucia-auth/adapter-prisma": "^4.0.1",
+    "oslo": "^1.2.1"
   }
 }
