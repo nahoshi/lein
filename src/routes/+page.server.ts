@@ -1,4 +1,6 @@
+import { fail, redirect } from "@sveltejs/kit";
 import prisma from "../lib/server/prisma"
+import { lucia } from "$lib/server/auth";
 
 export const load = async () => {
     let sessions = await prisma.linkTreeSession.findMany({
@@ -15,3 +17,18 @@ export const load = async () => {
         sessions
     }
 }
+
+export const actions = {
+    logout: async (event) => {
+        if (!event.locals.session) {
+            return fail(401);
+        }
+        await lucia.invalidateSession(event.locals.session.id);
+        const sessionCookie = lucia.createBlankSessionCookie();
+        event.cookies.set(sessionCookie.name, sessionCookie.value, {
+            path: ".",
+            ...sessionCookie.attributes
+        });
+        redirect(302, "/auth/login");
+    }
+};
