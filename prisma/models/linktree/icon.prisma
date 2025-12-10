@@ -1,0 +1,6 @@
+model LinkTreeIcon {
+    id   Int            @id @default(autoincrement())
+    type String
+    name String
+    link LinkTreeItem[]
+}
