@@ -1,6 +1,0 @@
-model Icon {
-    id   Int    @id @default(autoincrement())
-    type String
-    name String
-    link Link?
-}
