@@ -26,8 +26,10 @@
     </p>
 </div>
 
-<div class="flex flex-col gap-2 mx-auto md:w-[70%] w-[95%] justify-center">
+<div
+    class="flex flex-col gap-2 mx-auto md:w-[70%] w-[95%] justify-center"
+>
     {#each data.sessions as session}
-        <Session title={session.name} links={session.links} />
+        <Session title={session.name} itens={session.itens} />
     {/each}
 </div>
