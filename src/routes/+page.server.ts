@@ -1,9 +1,9 @@
 import prisma from "../lib/server/prisma"
 
 export const load = async () => {
-    let sessions = await prisma.session.findMany({
+    let sessions = await prisma.linkTreeSession.findMany({
         include: {
-            links: {
+            itens: {
                 include: {
                     icon: true
                 }
