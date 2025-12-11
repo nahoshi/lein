@@ -1,40 +1,40 @@
-<script>
+<script lang="ts">
     import { enhance } from "$app/forms";
+    import { superForm } from "sveltekit-superforms";
+    import type { PageData } from "./$types";
+    import Input from "$lib/components/auth/Input.svelte";
 
-    let { form } = $props();
+    let { data }: { data: PageData } = $props();
+
+    const { form, errors } = $derived(superForm(data.form));
 </script>
 
-<form method="post" use:enhance>
-    <fieldset
-        class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
-    >
-        <legend class="fieldset-legend alegreya-sans font-bold text-3xl"
-            >Login</legend
-        >
+<legend class="fieldset-legend alegreya-sans font-bold text-3xl">Login</legend>
 
-        <label for="username" class="label text-sm mukta-vaani">Username</label>
-        <input
-            id="username"
-            type="text"
-            class="input quattrocento"
-            name="username"
-            placeholder="Username"
-        />
+<Input
+    title="Username"
+    name="username"
+    placeholder="Nome de usuario"
+    bind:value={$form.username}
+    errors={$errors.username}
+/>
+<Input
+    title="Senha"
+    name="password"
+    placeholder="Senha"
+    type="password"
+    bind:value={$form.password}
+    errors={$errors.password}
+/>
 
-        <label for="password" class="label text-sm mukta-vaani">Password</label>
-        <input
-            id="password"
-            type="password"
-            class="input quattrocento"
-            name="password"
-            placeholder="Password"
-        />
+<button class="btn btn-neutral mt-4 text-base mukta-vaani" type="submit">
+    Login
+</button>
 
-        <button class="btn btn-neutral mt-4 text-base mukta-vaani" type="submit"
-            >Login</button
-        >
-        {#if form?.message}
-            <p class="text-error text-center">{form.message}</p>
-        {/if}
-    </fieldset>
-</form>
+{#if $errors._errors}
+    {#each $errors._errors as error}
+        <p class="text-error text-center">
+            {error}
+        </p>
+    {/each}
+{/if}
