@@ -4,35 +4,51 @@ import { Argon2id } from "oslo/password";
 import { lucia } from '$lib/server/auth.js';
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { superValidate } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { UserSinginValidator } from '$lib/validators/user.js';
 
-export const load: PageServerLoad = ({ locals }) => {
-    if (locals.user) {
+
+export const load: PageServerLoad = async (event) => {
+    if (event.locals.user) {
         redirect(302, "/")
     }
+
+    const form = await superValidate(event, zod4(UserSinginValidator))
+
+    return { form };
 }
 
 export const actions = {
-    default: async ({ request, cookies }) => {
-        const data = await request.formData();
-        const { username, password, key } = Object.fromEntries(data) as Record<string, string>
-        if (!username || !password || !key) {
-            return fail(400, { message: "Nome de usuario, Senha e Chave de registro, são requeridas." });
+    default: async (event) => {
+        let { cookies } = event;
+
+        const form = await superValidate(event, zod4(UserSinginValidator))
+
+        if (!form.valid) {
+            return fail(400, { form })
         }
 
-        if (key != `${process.env.REGISTER_KEY}`) {
-            return fail(400, { message: "Chave de registro está incorreta." })
+        const user = await prisma.user.findUnique({
+            where: {
+                username: form.data.username
+            }
+        })
+        if (user) {
+            form.errors.username = ['Username já existente']
+            return fail(400, { form })
         }
 
         const userId = generateId(15)
-        const hashedPassword = await new Argon2id().hash(password)
-        const user = await prisma.user.create({
+        const hashedPassword = await new Argon2id().hash(form.data.password)
+        const newUser = await prisma.user.create({
             data: {
                 id: userId,
-                username: username,
+                username: form.data.username,
                 password: hashedPassword
             }
         })
-        const session = await lucia.createSession(user.id, {});
+        const session = await lucia.createSession(newUser.id, {});
         const sessionCookie = lucia.createSessionCookie(session.id);
         cookies.set(sessionCookie.name, sessionCookie.value, {
             path: ".",
