@@ -1,22 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import prisma from "../lib/server/prisma"
 import { lucia } from "$lib/server/auth";
-
-export const load = async () => {
-    let sessions = await prisma.linkTreeSession.findMany({
-        include: {
-            itens: {
-                include: {
-                    icon: true
-                }
-            }
-        }
-    })
-
-    return {
-        sessions
-    }
-}
 
 export const actions = {
     logout: async (event) => {
