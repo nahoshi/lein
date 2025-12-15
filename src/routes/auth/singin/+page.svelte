@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import { superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
-    import Input from "$lib/components/auth/Input.svelte";
+    import Input from "$lib/components/Input.svelte";
 
     let { data }: { data: PageData } = $props();
 

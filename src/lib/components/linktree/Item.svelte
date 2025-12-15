@@ -1,13 +1,13 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
-    import type { Icon } from "../../generated/prisma/client";
+    import type { LinkTreeIcon } from "../../../generated/prisma/client";
 
     let {
         url,
         children,
         icon = null,
     }: {
-        icon: Icon | null;
+        icon: LinkTreeIcon | null;
         children: Snippet;
         url: string;
     } = $props();

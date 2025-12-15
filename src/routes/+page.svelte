@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Session from "$lib/components/Session.svelte";
+    import Session from "$lib/components/linktree/Session.svelte";
     import type { PageData } from "./$types";
 
     let {
